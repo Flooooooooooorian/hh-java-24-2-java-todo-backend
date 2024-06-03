@@ -1,5 +1,6 @@
 package de.neuefische.backend.todo;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,8 +24,8 @@ class TodoController {
     }
 
     @PostMapping
-    Todo postTodo(@RequestBody Todo todo) {
-        return todoService.save(todo);
+    Todo postTodo(@RequestBody @Valid NewTodoDTO todo) {
+        return todoService.save(new Todo(todo.description(), todo.status()));
     }
 
     @GetMapping("{id}")
