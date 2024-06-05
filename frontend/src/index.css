@@ -1,0 +1,41 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.page {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+}
+
+h1 {
+    grid-column: 1 / -1;
+    text-align: center;
+}
+
+.todo-card {
+    display: grid;
+    border: solid 1px black;
+    border-radius: 5px;
+    height: 50px;
+    margin-bottom: 20px;
+    padding: 10px;
+    gap: 5px;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.todo-card.new-todo {
+    grid-template-columns: inherit;
+}
+
+.todo-card input {
+    width: 100%;
+    grid-column: 1 / -1;
+    border-width: 0 0 1px 0;
+    padding: 0;
+}
+
+.todo-card button {
+    justify-self: center;
+    min-width: 50px;
+}

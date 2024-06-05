@@ -14,8 +14,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handdeMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        //Casten vermeiden!
-        FieldError error = ((FieldError) ex.getAllErrors().get(0));
+        FieldError error = ex.getFieldErrors().get(0);
 
         return "Attribute: " + error.getField() + " " + error.getDefaultMessage();
     }
