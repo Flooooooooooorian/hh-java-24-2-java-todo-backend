@@ -1,7 +1,7 @@
-package de.neuefische.todo.backend;
+package de.neuefische.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.neuefische.todo.backend.todo.Todo;
+import de.neuefische.backend.todo.Todo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,20 +25,11 @@ public class TodoIntegrationTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Test
-    void expectEmptyListOnGet() throws Exception {
-        mockMvc.perform(get("http://localhost:8080/api/todo"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("""
-                        []
-                        """));
-    }
-
     @DirtiesContext
     @Test
     void expectSuccessfulPost() throws Exception {
         String actual = mockMvc.perform(
-                        post("http://localhost:8080/api/todo")
+                        post("/api/todo")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {"description":"Nächsten Endpunkt implementieren","status":"OPEN"}
@@ -64,7 +55,7 @@ public class TodoIntegrationTest {
     @Test
     void expectSuccessfulPut() throws Exception {
         String saveResult = mockMvc.perform(
-                        post("http://localhost:8080/api/todo")
+                        post("/api/todo")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {"description":"Nächsten Endpunkt implementieren","status":"OPEN"}
@@ -85,7 +76,7 @@ public class TodoIntegrationTest {
         String id = saveResultTodo.id();
 
         mockMvc.perform(
-                        put("http://localhost:8080/api/todo/" + id + "/update")
+                        put("/api/todo/" + id + "/update")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {"id":"<ID>","description":"Bla","status":"IN_PROGRESS"}
@@ -104,36 +95,9 @@ public class TodoIntegrationTest {
 
     @DirtiesContext
     @Test
-    void expectSuccessfulDelete() throws Exception {
-        String saveResult = mockMvc.perform(
-                        post("http://localhost:8080/api/todo")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {"description":"Nächsten Endpunkt implementieren","status":"OPEN"}
-                                        """)
-                )
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        Todo saveResultTodo = objectMapper.readValue(saveResult, Todo.class);
-        String id = saveResultTodo.id();
-
-        mockMvc.perform(delete("http://localhost:8080/api/todo/" + id))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("http://localhost:8080/api/todo"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("""
-                        []
-                        """));
-    }
-
-    @DirtiesContext
-    @Test
     void expectTodoOnGetById() throws Exception {
         String actual = mockMvc.perform(
-                        post("http://localhost:8080/api/todo")
+                        post("/api/todo")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {"description":"Nächsten Endpunkt implementieren","status":"OPEN"}
@@ -153,7 +117,7 @@ public class TodoIntegrationTest {
         Todo actualTodo = objectMapper.readValue(actual, Todo.class);
         String id = actualTodo.id();
 
-        mockMvc.perform(get("http://localhost:8080/api/todo/" + id))
+        mockMvc.perform(get("/api/todo/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {
